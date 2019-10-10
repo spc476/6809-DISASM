@@ -1038,7 +1038,7 @@ getibyte	pshs	u
 
 getiword	pshs	u
 		ldu	theaddr,y
-		lda	,u++
+		ldd	,u++
 		stu	theaddr,y
 		puls	u,pc
 
