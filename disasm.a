@@ -478,7 +478,7 @@ ptoperand	equ	-10
 indexidx	equ	-11
 opbyte		equ	-12
 thepage		equ	-13
-bufsiz		equ	45
+bufsiz		equ	50
 
 disasm		pshs	u,y,x,dp,a,b,cc	; save registers
 		tfr	s,y		; using Y to reference locals
@@ -533,15 +533,8 @@ fpage1		lda	#$10		; we're page 1
 		sta	thepage,y	; save for later
 		leax	<opsp1,pc	; table of page1 opcodes
 
-fpagerest	lda	#$10		; check for page1 op as operand
-		cmpa	[theaddr,y]
-		beq	checkbad	; if so, bad code!  no cookie for you!
-		inca			; check for page2 op
-		cmpa	[theaddr,y]
-		beq	checkbad	; again, no cookie for you!
-
-		lda	[theaddr,y]	; get double opcode
-		bsr	findop		; find entry
+fpagerest	lda	[theaddr,y]	; get 2nd opcode byte
+		lbsr	findop		; find entry
 		lbsr	coptop		; fill out text fields
 		leau	jmptab,pc	; pointer to instruction type 
 		lda	,x		; get instruction type
@@ -552,14 +545,6 @@ fpagerest	lda	#$10		; check for page1 op as operand
 		std	2,u		; shift over two spaces
 		lda	thepage,y	; get page op
 		lbra	phex2		; print it
-
-checkbad	lbsr	getibyte	; get next opcode byte
-		ldu	popcode,y	; add operand byte as part of opcode
-		leau	2,u		; but as second byte
-		lbsr	phex2
-		ldu	ptopcode,y	; print ILLEGAL as topcode
-		ldb	#tillegal
-		lbra	strcpy
 
 ;---------------------------------------------------------------------
 ; Extended opcode information.  The structure here is:
@@ -631,7 +616,7 @@ opsp2		fcb	$3F,inherent	,tswi		,t3
 fpage2		lda	#$11		; we're page 2
 		sta	thepage,y	; save for later
 		leax	opsp2,pc	; table of page2 opcodes
-		bra	fpagerest	; handle as per page1
+		lbra	fpagerest	; handle as per page1
 
 ;--------------------------------------------------------
 ;	FINDOP		Find page op
