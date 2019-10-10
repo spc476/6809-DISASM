@@ -165,6 +165,16 @@ tbr		asciih	'B,'
 tar		asciih	'A,'
 tdr		asciih	'D,'
 
+indexreg	fcb	regX	,regY	,regU	,regS
+
+exgtfr		fcb	regD	,regX	,regY	,regU
+		fcb	regS	,regPC	,unknown,unknown
+		fcb	regA	,regB	,regCC	,regDP
+		fcb	unknown,unknown,unknown,unknown
+
+pshpultab	fcb	regPC	,0	,regY	,regX
+		fcb	regDP	,regB	,regA	,regCC
+
 ;----------------------------------------------------------------------
 ; Opcode tables.  The main table has the following structure:
 ;
@@ -445,6 +455,66 @@ ops		fcb	direct		,tneg		,sp	; $00
 		fcb	extended	,tld		,regU
 		fcb	extended	,tst		,regU
 
+;---------------------------------------------------------------------
+; Extended opcode information.  The structure here is:
+;
+;	2nd byte of opcode
+;	addressing mode
+;	text of opcode
+;	additional text for opcode
+;---------------------------------------------------------------------
+
+opsp1		fcb	$21,lrelative	,tbrn		,sp
+		fcb	$22,lrelative	,tbhi		,sp
+		fcb	$23,lrelative	,tbls		,sp
+		fcb	$24,lrelative	,tbcc		,sp
+		fcb	$25,lrelative	,tbcs		,sp
+		fcb	$26,lrelative	,tbne		,sp
+		fcb	$27,lrelative	,tbeq		,sp
+		fcb	$28,lrelative	,tbvc		,sp
+		fcb	$29,lrelative	,tbvs		,sp
+		fcb	$2A,lrelative	,tbpl		,sp
+		fcb	$2B,lrelative	,tbmi		,sp
+		fcb	$2C,lrelative	,tbge		,sp
+		fcb	$2D,lrelative	,tblt		,sp
+		fcb	$2E,lrelative	,tbgt		,sp
+		fcb	$2F,lrelative	,tble		,sp
+		fcb	$3F,inherent	,tswi		,t2
+		fcb	$83,imm16	,tcmp		,regD
+		fcb	$8C,imm16	,tcmp		,regY
+		fcb	$8E,imm16	,tld		,regY
+		fcb	$93,direct	,tcmp		,regD
+		fcb	$9C,direct	,tcmp		,regY
+		fcb	$9E,direct	,tld		,regY
+		fcb	$9F,direct	,tst		,regY
+		fcb	$A3,indexed	,tcmp		,regD
+		fcb	$AC,indexed	,tcmp		,regY
+		fcb	$AE,indexed	,tld		,regY
+		fcb	$AF,indexed	,tst		,regY
+		fcb	$B3,extended	,tcmp		,regD
+		fcb	$BC,extended	,tcmp		,regY
+		fcb	$BE,extended	,tld		,regY
+		fcb	$BF,extended	,tst		,regY
+		fcb	$CE,imm16	,tld		,regS
+		fcb	$DE,direct	,tld		,regS
+		fcb	$DF,direct	,tst		,regS
+		fcb	$EE,indexed	,tld		,regS
+		fcb	$EF,indexed	,tst		,regS
+		fcb	$FE,extended	,tld		,regS
+		fcb	$FF,extended	,tst		,regS
+		fcb	$00,illegal	,tillegal	,sp
+
+opsp2		fcb	$3F,inherent	,tswi		,t3
+		fcb	$83,imm16	,tcmp		,regU
+		fcb	$8C,imm16	,tcmp		,regS
+		fcb	$93,direct	,tcmp		,regU
+		fcb	$9C,direct	,tcmp		,regS
+		fcb	$A3,indexed	,tcmp		,regU
+		fcb	$AC,indexed	,tcmp		,regS
+		fcb	$B3,extended	,tcmp		,regU
+		fcb	$BC,extended	,tcmp		,regS
+		fcb	$00,illegal	,tillegal	,sp
+
 ;--------------------------------------------------------
 
 jmptab		lbra	fillegal
@@ -531,7 +601,7 @@ disasm10	sta	,x+		; clear buffer space
 
 fpage1		lda	#$10		; we're page 1
 		sta	thepage,y	; save for later
-		leax	<opsp1,pc	; table of page1 opcodes
+		leax	opsp1,pc	; table of page1 opcodes
 
 fpagerest	lda	[theaddr,y]	; get 2nd opcode byte
 		lbsr	findop		; find entry
@@ -545,66 +615,6 @@ fpagerest	lda	[theaddr,y]	; get 2nd opcode byte
 		std	2,u		; shift over two spaces
 		lda	thepage,y	; get page op
 		lbra	phex2		; print it
-
-;---------------------------------------------------------------------
-; Extended opcode information.  The structure here is:
-;
-;	2nd byte of opcode
-;	addressing mode
-;	text of opcode
-;	additional text for opcode
-;---------------------------------------------------------------------
-
-opsp1		fcb	$21,lrelative	,tbrn		,sp
-		fcb	$22,lrelative	,tbhi		,sp
-		fcb	$23,lrelative	,tbls		,sp
-		fcb	$24,lrelative	,tbcc		,sp
-		fcb	$25,lrelative	,tbcs		,sp
-		fcb	$26,lrelative	,tbne		,sp
-		fcb	$27,lrelative	,tbeq		,sp
-		fcb	$28,lrelative	,tbvc		,sp
-		fcb	$29,lrelative	,tbvs		,sp
-		fcb	$2A,lrelative	,tbpl		,sp
-		fcb	$2B,lrelative	,tbmi		,sp
-		fcb	$2C,lrelative	,tbge		,sp
-		fcb	$2D,lrelative	,tblt		,sp
-		fcb	$2E,lrelative	,tbgt		,sp
-		fcb	$2F,lrelative	,tble		,sp
-		fcb	$3F,inherent	,tswi		,t2
-		fcb	$83,imm16	,tcmp		,regD
-		fcb	$8C,imm16	,tcmp		,regY
-		fcb	$8E,imm16	,tld		,regY
-		fcb	$93,direct	,tcmp		,regD
-		fcb	$9C,direct	,tcmp		,regY
-		fcb	$9E,direct	,tld		,regY
-		fcb	$9F,direct	,tst		,regY
-		fcb	$A3,indexed	,tcmp		,regD
-		fcb	$AC,indexed	,tcmp		,regY
-		fcb	$AE,indexed	,tld		,regY
-		fcb	$AF,indexed	,tst		,regY
-		fcb	$B3,extended	,tcmp		,regD
-		fcb	$BC,extended	,tcmp		,regY
-		fcb	$BE,extended	,tld		,regY
-		fcb	$BF,extended	,tst		,regY
-		fcb	$CE,imm16	,tld		,regS
-		fcb	$DE,direct	,tld		,regS
-		fcb	$DF,direct	,tst		,regS
-		fcb	$EE,indexed	,tld		,regS
-		fcb	$EF,indexed	,tst		,regS
-		fcb	$FE,extended	,tld		,regS
-		fcb	$FF,extended	,tst		,regS
-		fcb	$00,illegal	,tillegal	,sp
-
-opsp2		fcb	$3F,inherent	,tswi		,t3
-		fcb	$83,imm16	,tcmp		,regU
-		fcb	$8C,imm16	,tcmp		,regS
-		fcb	$93,direct	,tcmp		,regU
-		fcb	$9C,direct	,tcmp		,regS
-		fcb	$A3,indexed	,tcmp		,regU
-		fcb	$AC,indexed	,tcmp		,regS
-		fcb	$B3,extended	,tcmp		,regU
-		fcb	$BC,extended	,tcmp		,regS
-		fcb	$00,illegal	,tillegal	,sp
 
 ;--------------------------------------------------------
 ;	FPAGE2		Handle page1 op
@@ -737,7 +747,7 @@ findex10	ora	#$E0		; make negative
 		lbsr	sphex2
 		lda	#',		; comma
 		sta	,u+
-		leax	<indexreg,pc	; and now register
+		leax	indexreg,pc	; and now register
 		lda	indexidx,y	; get index
 		ldb	a,x		; get string representing index reg
 		lbra	strcpy		; print and return
@@ -747,7 +757,7 @@ findex10	ora	#$E0		; make negative
 findexfull	ldu	ptoperand,y
 		anda	#$0F		; isolate last four bits
 		lsla			; convert into index
-		leax	<fijmptab,pc	; and jump to appropriate routine
+		leax	fijmptab,pc	; and jump to appropriate routine
 		jsr	a,x
 
 		lda	opbyte,y	; get operand byte
@@ -794,7 +804,7 @@ firp		lda	opbyte,y	; get operand byte
 fripnt		lda	#',		; display comma
 		sta	,u+
 		lda	indexidx,y	; get index reg
-		leax	<indexreg,pc	; table of index registers
+		leax	indexreg,pc	; table of index registers
 		ldb	a,x		; get string
 		lbsr	strcpy		; print it
 		lda	#'+		; add +
@@ -805,15 +815,13 @@ firpp		bsr	fripnt		; handle the ,R+
 		sta	,u+		; and add the final +
 		rts
 
-indexreg	fcb	regX	,regY	,regU	,regS
-
 fimp		lda	opbyte,y	; get operand byte
 		bita	#$10		; check indirect bit
 		bne	fidxill		; if there, illegal
 		ldb	#tcm		; get ,-
 		lbsr	strcpy		; print it
 fimpfinish	lda	indexidx,y	; get index reg
-		leax	<indexreg,pc	; table of index registers
+		leax	indexreg,pc	; table of index registers
 		ldb	a,x		; get string
 		lbra	strcpy		; print it
 		
@@ -845,7 +853,7 @@ fi15r		bsr	fi15off		; print 15bit offset
 
 fidr		ldb	#tdr		; get D,R
 fiarfinish	lbsr	strcpy
-		leax	<indexreg,pc
+		leax	indexreg,pc
 		lda	indexidx,y
 		ldb	a,x
 		lbra	strcpy
@@ -933,11 +941,6 @@ frelptraddr	addd	theaddr,y
 ;Exit:	Y - next instruction
 ;--------------------------------------------------------
 
-exgtfr		fcb	regD	,regX	,regY	,regU
-		fcb	regS	,regPC	,unknown,unknown
-		fcb	regA	,regB	,regCC	,regDP
-		fcb	unknown,unknown,unknown,unknown
-
 fexg		ldu	poperand,y
 		lda	[theaddr,y]
 		lbsr	phex2
@@ -963,9 +966,6 @@ fexg		ldu	poperand,y
 ;	X - instruction data
 ;Exit:	Y - next instruction
 ;--------------------------------------------------------
-
-pshpultab	fcb	regPC	,0	,regY	,regX
-		fcb	regDP	,regB	,regA	,regCC
 
 fpushpull	ldu	theaddr,y	; get opcode
 		lda	-1,u
@@ -1135,5 +1135,6 @@ strcpydone	anda	#$7F		; mask of ending bit
 		puls	a,x,pc		; return
 
 ;--------------------------------------------------------
+		ascii	'spc@conman.org\r\n'
 
 zzlast		equ	*
