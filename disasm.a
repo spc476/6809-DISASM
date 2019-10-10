@@ -1006,7 +1006,7 @@ fpushpull50	decb
 
 		lda	-1,u
 		cmpa	#',
-		beq	fpushpullexit
+		bne	fpushpullexit
 		clr	,-u
 
 fpushpullexit	puls	a,pc
