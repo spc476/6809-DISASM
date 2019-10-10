@@ -84,7 +84,7 @@ init		lbra	disasm
 ; do not exceed offset 255 for the start of any string.
 ;---------------------------------------------------------------------------
 
-tillegal	asciih	'ILL'
+tillegal	asciih	'ILLEGAL'
 tabx		asciih	'ABX'
 tadc		asciih	'ADC'
 tadd		asciih	'ADD'
