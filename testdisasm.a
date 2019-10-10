@@ -1,16 +1,16 @@
 	; $00 - $0F
 		neg	$00
-		fcb	$01
-		fcb	$02
+		;fcb	$01
+		;fcb	$02
 		com	$03
 		lsr	$04
-		fcb	$05
+		;fcb	$05
 		ror	$06
 		asr	$07
 		lsl	$08
 		rol	$09
 		dec	$0A
-		fcb	$0B
+		;fcb	$0B
 		inc	$0C
 		tst	$0D
 		jmp	$0E
