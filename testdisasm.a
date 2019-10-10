@@ -17,57 +17,57 @@
 		clr	$0F
 
 	; page 1 opcodes
-	;	lbrn	* + $1021 + 4
-	;	lbhi	* + $1022 + 4
-	;	lbls	* + $1023 + 4
-	;	lbcc	* + $1024 + 4
-	;	lbhs	* + $1024 + 4
-	;	lbcs	* + $1025 + 4
-	;	lblo	* + $1025 + 4
-	;	lbne	* + $1026 + 4
-	;	lbeq	* + $1027 + 4
-	;	lbvc	* + $1028 + 4
-	;	lbvs	* + $1029 + 4
-	;	lbpl	* + $102A + 4
-	;	lbmi	* + $102B + 4
-	;	lbge	* + $102C + 4
-	;	lblt	* + $102D + 4
-	;	lbgt	* + $102E + 4
-	;	lble	* + $102F + 4
-	;	swi2
-	;	cmpd	#$1083
-	;	cmpy	#$108C
-	;	ldy	#$108E
-	;	cmpd	$93
-	;	cmpy	$9C
-	;	ldy	$9E
-	;	sty	$9F
-	;	cmpd	,x
-	;	cmpy	,y
-	;	ldy	,y
-	;	sty	,y
-	;	cmpd	$10B3
-	;	cmpy	$10BC
-	;	ldy	$10BE
-	;	sty	$10BF
-	;	lds	#$10CE
-	;	lds	$DE
-	;	sts	$DF
-	;	lds	[$10EE]
-	;	sts	[$10EF]
-	;	lds	$10FE
-	;	sts	$10FF
+		lbrn	* + $1021 + 4
+		lbhi	* + $1022 + 4
+		lbls	* + $1023 + 4
+		lbcc	* + $1024 + 4
+		lbhs	* + $1024 + 4
+		lbcs	* + $1025 + 4
+		lblo	* + $1025 + 4
+		lbne	* + $1026 + 4
+		lbeq	* + $1027 + 4
+		lbvc	* + $1028 + 4
+		lbvs	* + $1029 + 4
+		lbpl	* + $102A + 4
+		lbmi	* + $102B + 4
+		lbge	* + $102C + 4
+		lblt	* + $102D + 4
+		lbgt	* + $102E + 4
+		lble	* + $102F + 4
+		swi2
+		cmpd	#$1083
+		cmpy	#$108C
+		ldy	#$108E
+		cmpd	$93
+		cmpy	$9C
+		ldy	$9E
+		sty	$9F
+		cmpd	,x
+		cmpy	,y
+		ldy	,y
+		sty	,y
+		cmpd	$10B3
+		cmpy	$10BC
+		ldy	$10BE
+		sty	$10BF
+		lds	#$10CE
+		lds	$DE
+		sts	$DF
+		lds	[$10EE]
+		sts	[$10EF]
+		lds	$10FE
+		sts	$10FF
 
 	; page 2 opcodes
-	;	swi3
-	;	cmpu	#$1183
-	;	cmps	#$118C
-	;	cmpu	$93
-	;	cmps	$9C
-	;	cmpu	,--y
-	;	cmps	-84,y
-	;	cmpu	$11B3
-	;	cmps	$11BC
+		swi3
+		cmpu	#$1183
+		cmps	#$118C
+		cmpu	$93
+		cmps	$9C
+		cmpu	,--y
+		cmps	-84,y
+		cmpu	$11B3
+		cmps	$11BC
 
 	; $10 - $1F
 		nop
@@ -338,3 +338,5 @@
 		std	$FDFD
 		ldu	$FEFE
 		stu	$FFFF
+
+		nop
