@@ -972,9 +972,9 @@ fpushpull	ldu	theaddr,y	; get opcode
 		lda	-1,u
 		cmpa	#$35		; PSHS,PULS?
 		ble	fpushpulls
-		ldb	#regU
+		ldb	#regS
 		fcb	$8C		; skip next instruction
-fpushpulls	ldb	#regS
+fpushpulls	ldb	#regU
 		stb	,-s		; save register name
 
 		ldu	poperand,y
