@@ -601,10 +601,10 @@ disasm10	sta	,x+		; clear buffer space
 ;--------------------------------------------------------
 
 fpage1		lda	#$10		; we're page 1
-		sta	thepage,y	; save for later
 		leax	opsp1,pc	; table of page1 opcodes
 
-fpagerest	lda	[theaddr,y]	; get 2nd opcode byte
+fpagerest	sta	thepage,y	; save for later
+		lda	[theaddr,y]	; get 2nd opcode byte
 		bsr	findop		; find entry
 		lbsr	coptop		; fill out text fields
 		leau	jmptab,pc	; pointer to instruction type 
@@ -625,9 +625,8 @@ fpagerest	lda	[theaddr,y]	; get 2nd opcode byte
 ;--------------------------------------------------------
 
 fpage2		lda	#$11		; we're page 2
-		sta	thepage,y	; save for later
 		leax	opsp2,pc	; table of page2 opcodes
-		lbra	fpagerest	; handle as per page1
+		bra	fpagerest	; handle as per page1
 
 ;--------------------------------------------------------
 ;	FINDOP		Find page op
@@ -758,7 +757,7 @@ findex10	ora	#$E0		; make negative
 findexfull	ldu	ptoperand,y
 		anda	#$0F		; isolate last four bits
 		lsla			; convert into index
-		leax	fijmptab,pc	; and jump to appropriate routine
+		leax	<fijmptab,pc	; and jump to appropriate routine
 		jsr	a,x
 
 		lda	opbyte,y	; get operand byte
@@ -931,7 +930,7 @@ flrelative	ldu	ptopcode,y	; shift text opcode
 		lbsr	phex4d
 
 		ldu	ptoperand,y
-		lbsr	getiword
+		bsr	getiword
 frelptraddr	addd	theaddr,y
 		lbra	phex4d
 
@@ -956,7 +955,7 @@ fexg		ldu	poperand,y
 		lbsr	strcpy
 		lda	#',
 		sta	,u+
-		lbsr	getibyte
+		bsr	getibyte
 		anda	#$0F
 		ldb	a,x
 		lbra	strcpy
@@ -982,7 +981,7 @@ fpushpulls	ldb	#regU
 		bsr	phex2
 		leax	pshpultab,pc
 		ldu	ptoperand,y
-		lbsr	getibyte
+		bsr	getibyte
 		ldb	#8
 
 fpushpull10	rora
@@ -1145,6 +1144,6 @@ strcpydone	anda	#$7F		; mask of ending bit
 		puls	a,x,pc		; return
 
 ;--------------------------------------------------------
-		ascii	'sean@conman.org\r\n'
+		ascii	'         sean@conman.org'
 
 zzlast		equ	*
