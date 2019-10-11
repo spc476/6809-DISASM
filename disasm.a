@@ -533,9 +533,10 @@ jmptab		lbra	fillegal
 
 ;--------------------------------------------------------
 ;	DISASM
-;Entry:	X - buffer of 45 bytes
+;Entry:	X - buffer of 55 bytes
 ;	Y - address to disassemble
 ;Exit:	Y - next address 
+;	All others saved
 ;--------------------------------------------------------
 
 theaddr		equ	 6
@@ -594,9 +595,9 @@ disasm10	sta	,x+		; clear buffer space
 
 ;--------------------------------------------------------
 ;	FPAGE1		Handle page1 op
-;Entry: Y - operand byte
+;Entry: X - opcode entry
 ;	X - instruction data
-;Exit:	Y - next instruction
+;Exit:	Y - unmodified
 ;--------------------------------------------------------
 
 fpage1		lda	#$10		; we're page 1
@@ -604,7 +605,7 @@ fpage1		lda	#$10		; we're page 1
 		leax	opsp1,pc	; table of page1 opcodes
 
 fpagerest	lda	[theaddr,y]	; get 2nd opcode byte
-		lbsr	findop		; find entry
+		bsr	findop		; find entry
 		lbsr	coptop		; fill out text fields
 		leau	jmptab,pc	; pointer to instruction type 
 		lda	,x		; get instruction type
@@ -618,9 +619,9 @@ fpagerest	lda	[theaddr,y]	; get 2nd opcode byte
 
 ;--------------------------------------------------------
 ;	FPAGE2		Handle page1 op
-;Entry:	Y - operand byte
-;	X - instruction data
-;Exit:	Y - next instruction
+;Entry:	X - opcode entry
+;	Y - local vars
+;Exit:	Y - unmodified
 ;--------------------------------------------------------
 
 fpage2		lda	#$11		; we're page 2
@@ -630,9 +631,9 @@ fpage2		lda	#$11		; we're page 2
 
 ;--------------------------------------------------------
 ;	FINDOP		Find page op
-;Entry:	X - page op data
+;Entry:	X - page opcode array
 ;	A - opcode
-;Exit:	X - page op entry
+;Exit:	X - page opcode entry
 ;--------------------------------------------------------
 
 findop		tst	1,x		; invalid instruction?
@@ -647,8 +648,8 @@ findopfound	leax	1,x		; skip past opcode byte
 ;	FILLEGAL		decode illegal opcodes
 ;	FINHERENT		decode inherent opcodes
 ;Entry	X - opcode entry
-;	Y - address of operand
-;Exit	Y - next address
+;	Y - local vars
+;Exit	Y - unmodified
 ;--------------------------------------------------------
 
 fillegal			; we treat illegal ops as inherent
@@ -657,8 +658,8 @@ finherent	rts		; nothing to do here citizen, move along!
 ;--------------------------------------------------------
 ;	FIMMEDIATE		decode immediate opcodes
 ;Entry:	X - opcode entry
-;	Y - address of operand
-;Exit:	Y - next address
+;	Y - local vars
+;Exit:	Y - unmodified
 ;--------------------------------------------------------
 
 fimmediate	lda	[theaddr,y]
@@ -673,8 +674,8 @@ fimmediate	lda	[theaddr,y]
 ;--------------------------------------------------------
 ;	FIMM16			decode immediate 16b opcodes
 ;Entry:	X - opcode entry
-;	Y - address of operand
-;Exit:	Y - next address
+;	Y - local vars
+;Exit:	Y - unmodified
 ;--------------------------------------------------------
 
 fimm16		ldd	[theaddr,y]
@@ -688,9 +689,9 @@ fimm16		ldd	[theaddr,y]
 
 ;--------------------------------------------------------
 ;	FDIRECT		Handle direct mode instructions
-;Entry:	Y - operand byte
-;	X - instruction data
-;Exit:	Y - next instructions
+;Entry:	X - instruction entry
+;	Y - operand byte
+;Exit:	Y - unmodified
 ;--------------------------------------------------------
 
 fdirect		lda	[theaddr,y]
@@ -702,9 +703,9 @@ fdirect		lda	[theaddr,y]
 
 ;--------------------------------------------------------
 ;	FEXTENDED	Handle extended mode instructions
-;Entry:	Y - operand byte
-;	X - instruction data
-;Exit:	Y - next instruction
+;Entry:	X - opcode entry
+;	Y - local vars
+;Exit:	Y - unmodified
 ;--------------------------------------------------------
 
 fextended	ldd	[theaddr,y]
@@ -716,9 +717,9 @@ fextended	ldd	[theaddr,y]
 
 ;--------------------------------------------------------
 ;	FINDEXED	Handle indexed mode instructions
-;Entry:	Y - operand byte
-;	X - instruction data
-;Exit:	Y - next instruction
+;Entry:	X - opcode entry
+;	Y - local vars
+;Exit:	Y - unmodified
 ;
 ; NOTE:	Yes, this function is ugly, but so is decoding
 ;	the indexed addressing mode.  Ugh.
@@ -897,9 +898,9 @@ fiopr16		pshs	u		; save print pos
 
 ;--------------------------------------------------------
 ;	FRELATIVE	Handle branch instructions
-;Entry:	Y - operand byte
-;	X - instruction data
-;Exit:	Y - next instruction
+;Entry:	X - opcode entry
+;	Y - local vars
+;Exit:	Y - unmodified
 ;--------------------------------------------------------
 
 frelative	lda	[theaddr,y]
@@ -913,9 +914,9 @@ frelative	lda	[theaddr,y]
 
 ;--------------------------------------------------------
 ;	FLRELATIVE	Handle long branch instructions
-;Entry:	Y - operand byte
-;	X - instruction data
-;Exit:	Y - next instruction
+;Entry:	X - opcode entry
+;	Y - local vars
+;Exit:	Y - unmodified
 ;--------------------------------------------------------
 
 flrelative	ldu	ptopcode,y	; shift text opcode
@@ -936,9 +937,9 @@ frelptraddr	addd	theaddr,y
 
 ;--------------------------------------------------------
 ;	FEXG		Handle EXG,TFR instruction
-;Entry:	Y - operand byte
-;	X - instruction data
-;Exit:	Y - next instruction
+;Entry:	X - opcode entry
+;	Y - local vars
+;Exit:	Y - unmodified
 ;--------------------------------------------------------
 
 fexg		ldu	poperand,y
@@ -962,9 +963,9 @@ fexg		ldu	poperand,y
 
 ;--------------------------------------------------------
 ;	FPUSHPULL	Handle PSHS/PULS/PSHU/PULU instructions
-;Entry:	Y - operand byte
-;	X - instruction data
-;Exit:	Y - next instruction
+;Entry:	X - opcode entry
+;	Y - local vars
+;Exit:	Y - unmodified
 ;--------------------------------------------------------
 
 fpushpull	ldu	theaddr,y	; get opcode
@@ -1012,6 +1013,11 @@ fpushpull50	decb
 fpushpullexit	puls	a,pc
 
 ;--------------------------------------------------------
+;	GETIBYTE	Get the next insrtruction byte
+;Entry:	none
+;Exit:	A - next instruction byte
+;NOTE:	the address pointer is incremented
+;--------------------------------------------------------
 
 getibyte	pshs	u
 		ldu	theaddr,y
@@ -1019,6 +1025,11 @@ getibyte	pshs	u
 		stu	theaddr,y
 		puls	u,pc
 
+;--------------------------------------------------------
+;	GETIWORD	Get the next instruction word
+:Entry:	none
+;Exit:	D - next instruction word
+;NOTE:	the address pointer is incremented by two
 ;--------------------------------------------------------
 
 getiword	pshs	u
@@ -1029,10 +1040,9 @@ getiword	pshs	u
 
 ;--------------------------------------------------------
 ;	CADDROPTOP	Print address, opcode byte and opcode
-;Entry:	Y - address to print
-;	X - instruction info
-;Exit:	Y - next address
-;	U - next free spot
+;Entry:	X - instruction info
+;	Y - local vars
+;Exit:	Y - unmodified
 ;--------------------------------------------------------
 
 caddroptop	ldu	paddr,y	; print address
@@ -1135,6 +1145,6 @@ strcpydone	anda	#$7F		; mask of ending bit
 		puls	a,x,pc		; return
 
 ;--------------------------------------------------------
-		ascii	'spc@conman.org\r\n'
+		ascii	'sean@conman.org\r\n'
 
 zzlast		equ	*
