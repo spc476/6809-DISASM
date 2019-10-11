@@ -339,4 +339,11 @@
 		ldu	$FEFE
 		stu	$FFFF
 
+		fcb	$60,$87	; neg illegal,x
+		fcb	$60,$97 ; neg [illegal,x]
+		fcb	$60,$8A	; neg illegal,x
+		fcb	$60,$9A ; neg [illegal,x]
+		fcb	$60,$8E ; neg illegal,x
+		fcb	$60,$9E	; neg [illegal,x]
+
 		nop
