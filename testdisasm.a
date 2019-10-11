@@ -1,16 +1,16 @@
 	; $00 - $0F
 		neg	$00
-		;fcb	$01
-		;fcb	$02
+		fcb	$01
+		fcb	$02
 		com	$03
 		lsr	$04
-		;fcb	$05
+		fcb	$05
 		ror	$06
 		asr	$07
 		lsl	$08
 		rol	$09
 		dec	$0A
-		;fcb	$0B
+		fcb	$0B
 		inc	$0C
 		tst	$0D
 		jmp	$0E
@@ -72,14 +72,14 @@
 	; $10 - $1F
 		nop
 		sync
-		;fcb	$14
-		;fcb	$15
+		fcb	$14
+		fcb	$15
 		lbra	* + $1616 + 3
 		lbsr	* + $1717 + 3
-		;fcb	$18
+		fcb	$18
 		daa
 		orcc	#$1A
-		;fcb	$1B
+		fcb	$1B
 		andcc	#$1C
 		sex
 		exg	a,a
@@ -114,64 +114,64 @@
 		puls	pc,u,y,x,dp,a,b,cc
 		pshu	pc,s,y,x,dp,a,b,cc
 		pulu	pc,s,y,x,dp,a,b,cc
-		;fcb	$38
+		fcb	$38
 		rts
 		abx
 		rti
 		cwai	$3C
 		mul
-		;fcb	$3E
+		fcb	$3E
 		swi
 
 	; $40-4F
 		nega
-		;fcb	$41
-		;fcb	$42
+		fcb	$41
+		fcb	$42
 		coma
 		lsra
-		;fcb	$45
+		fcb	$45
 		rora
 		asra
 		lsla
 		rola
 		deca
-		;fcb	$4B
+		fcb	$4B
 		inca
 		tsta
-		;fcb	$4E
+		fcb	$4E
 		clra
 
 	; $50-5F
 		negb
-		;fcb	$51
-		;fcb	$52
+		fcb	$51
+		fcb	$52
 		comb
 		lsrb
-		;fcb	$55
+		fcb	$55
 		rorb
 		asrb
 		lslb
 		rolb
 		decb
-		;fcb	$5B
+		fcb	$5B
 		incb
 		tstb
-		;fcb	$5E
+		fcb	$5E
 		clrb
 
 	; $60-6F
 		neg	-16,x
-		;fcb	$61
-		;fcb	$62
+		fcb	$61
+		fcb	$62
 		com	15,x
 		lsr	,x
-		;fcb	$65
+		fcb	$65
 		ror	,x++
 		asr	,x+
 		lsl	,-x
 		rol	,--x
 		dec	a,x
-		;fcb	$6B
+		fcb	$6B
 		inc	<*+$6C+3,pc
 		tst	>*+$6D8D+4,pc
 		jmp	[<*+$6E+3,pc]
@@ -179,17 +179,17 @@
 
 	; $70-7F
 		neg	$7070
-		;fcb	$71
-		;fcb	$72
+		fcb	$71
+		fcb	$72
 		com	$7373
 		lsr	$7474
-		;fcb	$75
+		fcb	$75
 		ror	$7676
 		asr	$7777
 		lsl	$7878
 		rol	$7979
 		dec	$7A7A
-		;fcb	$7B
+		fcb	$7B
 		inc	$7C7C
 		tst	$7D7D
 		jmp	$7E7E
@@ -203,7 +203,7 @@
 		anda	#$84
 		bita	#$85
 		lda	#$86
-		;fcb	$87
+		fcb	$87
 		eora	#$88
 		adca	#$89
 		ora	#$8A
@@ -211,7 +211,7 @@
 		cmpx	#$8C8C
 		bsr	* + 2 - 115
 		ldx	#$8E8E
-		;fcb	$8F
+		fcb	$8F
 
 	; $90-9F
 		suba	$90
@@ -275,15 +275,15 @@
 		andb	#$C4
 		bitb	#$C5
 		ldb	#$C6
-		;fcb	$C7
+		fcb	$C7
 		eorb	#$C8
 		adcb	#$C9
 		orb	#$CA
 		addb	#$CB
 		ldd	#$CCCC
-		;fcb	$CD
+		fcb	$CD
 		ldu	#$CECE
-		;fcb	$CF
+		fcb	$CF
 
 	; $D0-DF
 		subb	$D0
