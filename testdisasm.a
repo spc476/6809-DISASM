@@ -57,6 +57,8 @@
 		sts	[$10EF]
 		lds	$10FE
 		sts	$10FF
+		fdb	$1050
+		fcb	$10,$EE,$87
 
 	; page 2 opcodes
 		swi3
@@ -68,6 +70,8 @@
 		cmps	-84,y
 		cmpu	$11B3
 		cmps	$11BC
+		fdb	$1150
+		fcb	$11,$AC,$87
 
 	; $10 - $1F
 		nop
