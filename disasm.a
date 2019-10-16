@@ -56,12 +56,12 @@ oppgsize	equ	4		; size of page opcode info entry
 	;--------------------------------------------------------------------
 
 illegal		equ	 0 * 3		; addressing mode values
-inherent	equ	 1 * 3
-immediate	equ	 2 * 3
-direct		equ	 3 * 3
-extended	equ	 4 * 3
-indexed		equ	 5 * 3
-relative	equ	 6 * 3
+inherent	equ	 1 * 3		; no data
+immediate	equ	 2 * 3		; data is part of instruction
+direct		equ	 3 * 3		; data has 8 bit address
+extended	equ	 4 * 3		; data has 16 bit address
+indexed		equ	 5 * 3		; data is indexed off index register
+relative	equ	 6 * 3		; one byte relative address
 lrelative	equ	 7 * 3		; two byte relative address
 page1		equ	 8 * 3		; page1 opcodes
 page2		equ	 9 * 3		; page2 opcodes
