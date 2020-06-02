@@ -122,7 +122,7 @@
 		rts
 		abx
 		rti
-		cwai	$3C
+		cwai	#$3C
 		mul
 		fcb	$3E
 		swi
