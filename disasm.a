@@ -1083,11 +1083,11 @@ phex2		sta	,-s		; save A
 		bsr	phex		; print it
 		lda	,s+		; restore A
 phex		anda	#$0F		; isolate lower nibble
-		adda	#'0		; convert to ascii
-		cmpa	#'9		; more conversion?
-		ble	phex10		; nope
-		adda	#7		; yup, get A-F range
-phex10		sta	,u+		; print
+		adda	#$90		; use Allison's method
+		daa			; to conver nibble to
+		adca	#$40		; ASCII hex digit
+		daa
+		sta	,u+		; print
 		rts
 
 ;--------------------------------------------------------
@@ -1144,6 +1144,6 @@ strcpydone	anda	#$7F		; mask of ending bit
 		puls	a,x,pc		; return
 
 ;--------------------------------------------------------
-		ascii	'         sean@conman.org'
+		ascii	'           sean@conman.org'
 
 zzlast		equ	*
