@@ -284,7 +284,7 @@ ops		fcb	direct		,tneg		,sp	; $00
 		fcb	inherent	,ttst		,regB
 		fcb	illegal		,tillegal	,sp
 		fcb	inherent	,tclr		,regB
-		
+
 		fcb	indexed		,tneg		,sp	; $60
 		fcb	illegal		,tillegal	,sp
 		fcb	illegal		,tillegal	,sp
@@ -589,7 +589,7 @@ disasm10	sta	,x+		; clear buffer space
 		leau	jmptab,pc	; get jump table
 		lda	,x		; get entry
 		jsr	a,u		; call entry
-		
+
 		tfr	y,s		; clean up local var space
 		puls	cc,b,a,dp,u,x,y,pc
 
@@ -1026,7 +1026,7 @@ getibyte	pshs	u
 
 ;--------------------------------------------------------
 ;	GETIWORD	Get the next instruction word
-:Entry:	none
+;Entry:	none
 ;Exit:	D - next instruction word
 ;NOTE:	the address pointer is incremented by two
 ;--------------------------------------------------------
