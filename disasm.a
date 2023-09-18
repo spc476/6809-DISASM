@@ -246,7 +246,7 @@ ops		fcb	direct		,tneg		,sp	; $00
 		fcb	inherent	,trts		,sp
 		fcb	inherent	,tabx		,sp
 		fcb	inherent	,trti		,sp
-		fcb	inherent	,tcwai		,sp
+		fcb	immediate	,tcwai		,sp
 		fcb	inherent	,tmul		,sp
 		fcb	illegal		,tillegal	,sp
 		fcb	inherent	,tswi		,sp
