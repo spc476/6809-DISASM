@@ -947,10 +947,10 @@ fexg		ldu	poperand,y
 		leax	exgtfr,pc
 		ldu	ptoperand,y
 		lda	[theaddr,y]
-		lsla
-		lsla
-		lsla
-		lsla
+		lsra
+		lsra
+		lsra
+		lsra
 		ldb	a,x
 		lbsr	strcpy
 		lda	#',
