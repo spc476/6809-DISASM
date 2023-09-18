@@ -824,7 +824,7 @@ fimpfinish	lda	indexidx,y	; get index reg
 		leax	indexreg,pc	; table of index registers
 		ldb	a,x		; get string
 		lbra	strcpy		; print it
-		
+
 fimmp		ldb	#tcmm		; handle ,--
 		lbsr	strcpy		; print it
 		bra	fimpfinish	; finish up
