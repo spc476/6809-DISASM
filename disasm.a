@@ -144,14 +144,14 @@ tsync		asciih	'SYNC'
 ttfr		asciih	'TFR'
 ttst		asciih	'TST'
 
-regA		asciih	'A'
-regB		asciih	'B'
+regA		equ	tbra + 2	; 'A'
+regB		equ	tsub + 2	; 'B'
 regDP		asciih	'DP'
-regCC		asciih	'CC'
-regD		asciih	'D'
-regX		asciih	'X'
+regCC		equ	tbcc + 1	; 'CC'
+regD		equ	tadd + 2	; 'D'
+regX		equ	tabx + 2	; 'X'
 regY		asciih	'Y'
-regS		asciih	'S'
+regS		equ	tbcs + 2	; 'S'
 regU		asciih	'U'
 regPC		asciih	'PC'
 
@@ -1057,6 +1057,37 @@ coptop		ldu	popcode,y	; print opcode
 		bra	strcpy
 
 ;--------------------------------------------------------
+;	SPHEX2		Display a signed byte as hex
+;Entry:	A - byte
+;	U - buffer
+;Exit:	U - U + 2
+;--------------------------------------------------------
+
+sphex2		tsta			; negative?
+		bpl	phex2		; nope
+		ldb	#'-		; print leading minus
+		stb	,u+
+		nega			; negate A
+		bra	phex2		; and print
+
+;--------------------------------------------------------
+;	SPHEX4		Display a signed word as hex	; MOVE prior to phex4
+;Entry:	D - word
+;	U - buffer
+;Exit:	U - U + 4
+;--------------------------------------------------------
+
+sphex4		tsta			; negative?
+		bpl	phex4d		; nope
+		stb	,-s		; save B
+		ldb	#'-		; print leading minus
+		stb	,u+
+		ldb	,s+
+		coma			; negate D
+		comb
+		addd	#1
+
+;--------------------------------------------------------
 ;	PHEX4D		Display word
 ;Entry:	U - buffer
 ;       D - word
@@ -1091,40 +1122,6 @@ phex		anda	#$0F		; isolate lower nibble
 		rts
 
 ;--------------------------------------------------------
-;	SPHEX2		Display a signed byte as hex
-;Entry:	A - byte
-;	U - buffer
-;Exit:	U - U + 2
-;--------------------------------------------------------
-
-sphex2		tsta			; negative?
-		bpl	phex2		; nope
-		ldb	#'-		; print leading minus
-		stb	,u+
-		nega			; negate A
-		bra	phex2		; and print
-
-;--------------------------------------------------------
-;	SPHEX4		Display a signed word as hex
-;Entry:	D - word
-;	U - buffer
-;Exit:	U - U + 4
-;--------------------------------------------------------
-
-sphex4		tsta			; negative?
-		bpl	sphex42		; nope
-		stb	,-s		; save B
-		ldb	#'-		; print leading minus
-		stb	,u+
-		ldb	,s+
-		coma			; negate D
-		comb
-		addd	#1
-sphex42		bsr	phex2		; print high byte
-		tfr	b,a		; now print low byte
-		bra	phex2
-
-;--------------------------------------------------------
 ;	STRCPY		Copy high-bit terminated string
 ;Entry: B - string
 ;	U - dest
@@ -1144,6 +1141,6 @@ strcpydone	anda	#$7F		; mask of ending bit
 		puls	a,x,pc		; return
 
 ;--------------------------------------------------------
-		ascii	'           sean@conman.org'
+		ascii	'                      sean@conman.org'
 
 zzlast		equ	*
