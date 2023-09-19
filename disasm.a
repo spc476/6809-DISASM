@@ -1141,7 +1141,7 @@ strcpydone	anda	#$7F		; mask of ending bit
 		puls	a,x,pc		; return
 
 ;--------------------------------------------------------
-		ascii	'     '
+		ascii	'     '		; the rest on gift certificate
 		ascii	'           GPL3+'
 		ascii	' sean@conman.org'
 
