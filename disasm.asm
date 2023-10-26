@@ -45,7 +45,6 @@
 ;=========================================================================
 
 opsize		equ	3		; size of opcode informtion entry
-oppgsize	equ	4		; size of page opcode info entry
 
 	;--------------------------------------------------------------------
 	; Values for addressing modes.  They're biased by 3 so we can
@@ -96,10 +95,8 @@ tbeq		fcs	'BEQ'
 tbge		fcs	'BGE'
 tbgt		fcs	'BGT'
 tbhi		fcs	'BHI'
-tbhs		fcs	'BHS'
 tbit		fcs	'BIT'
 tble		fcs	'BLE'
-tblo		fcs	'BLO'
 tbls		fcs	'BLS'
 tblt		fcs	'BLT'
 tbmi		fcs	'BMI'
@@ -539,8 +536,7 @@ jmptab		lbra	fillegal
 ;	All others saved
 ;--------------------------------------------------------
 
-theaddr		equ	 6
-thebuff		equ	 4
+theaddr		equ	 6		; Y being passed in
 paddr		equ	-2
 popcode		equ	-4
 poperand	equ	-6
@@ -1141,7 +1137,7 @@ strcpydone	anda	#$7F		; mask of ending bit
 		puls	a,x,pc		; return
 
 ;--------------------------------------------------------
-		fcc	'     '		; the rest on gift certificate
+		fcc	'           '	; the rest on gift certificate
 		fcc	'           GPL3+'
 		fcc	' sean@conman.org'
 
