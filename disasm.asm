@@ -663,7 +663,7 @@ fimmediate	lda	[theaddr,y]
 		ldu	ptoperand,y
 		lda	#'#
 		sta	,u+
-		lbsr	getibyte
+gbap		lbsr	getibyte
 		lbra	phex2
 
 ;--------------------------------------------------------
@@ -679,7 +679,7 @@ fimm16		ldd	[theaddr,y]
 		ldu	ptoperand,y
 		lda	#'#
 		sta	,u+
-		lbsr	getiword
+gwap		lbsr	getiword
 		lbra	phex4d
 
 ;--------------------------------------------------------
@@ -693,8 +693,7 @@ fdirect		lda	[theaddr,y]
 		ldu	poperand,y
 		lbsr	phex2
 		ldu	ptoperand,y
-		lbsr	getibyte
-		lbra	phex2
+		bra	gbap
 
 ;--------------------------------------------------------
 ;	FEXTENDED	Handle extended mode instructions
@@ -707,8 +706,7 @@ fextended	ldd	[theaddr,y]
 		ldu	poperand,y
 		lbsr	phex4d
 		ldu	ptoperand,y
-		lbsr	getiword
-		lbra	phex4d
+		bra	gwap
 
 ;--------------------------------------------------------
 ;	FINDEXED	Handle indexed mode instructions
@@ -855,8 +853,7 @@ fiarfinish	lbsr	strcpy
 		lbra	strcpy
 
 fi7pc		bsr	fi7off		; handle +-7b,PC
-		ldb	#regPC
-		lbra	strcpy
+		fcb	$8C		; cmpx # (skip next instruction)
 
 fi15pc		bsr	fi15off		; handle +-15b,PC
 		ldb	#regPC
@@ -1137,7 +1134,8 @@ strcpydone	anda	#$7F		; mask of ending bit
 		puls	a,x,pc		; return
 
 ;--------------------------------------------------------
-		fcc	'           '	; the rest on gift certificate
+		fcc	'       '	; the rest on gift certificate
+		fcc	'                '
 		fcc	'           GPL3+'
 		fcc	' sean@conman.org'
 
