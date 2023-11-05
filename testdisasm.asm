@@ -110,6 +110,10 @@
 		andcc	#$1C
 		sex
 		exg	a,a
+		fcb	$1E,$81 ; exg a,x
+		fcb	$1E,$18 ; exg x,a
+		fcb	$1E,$C1 ; exg ?,x
+		fcb	$1E,$1C ; exg x,?
 		tfr	x,x
 
 	; $20-$2F
@@ -372,5 +376,6 @@
 		fcb	$60,$9A ; neg [illegal,x]
 		fcb	$60,$8E ; neg illegal,x
 		fcb	$60,$9E	; neg [illegal,x]
+		fcb	$60,$FF,$60,$60
 
 		nop
