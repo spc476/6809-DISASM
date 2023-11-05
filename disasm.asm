@@ -854,6 +854,7 @@ fiarfinish	lbsr	strcpy
 
 fi7pc		lbsr	getibyte	; handle +-7b,PC
 		bsr	fiopr8
+		tfr	a,b
 		sex
 		bra	fipcdone
 fi15pc		lbsr	getiword	; handle +-15b,PC
@@ -1138,7 +1139,7 @@ strcpydone	anda	#$7F		; mask of ending bit
 
 ;--------------------------------------------------------
 
-		fcc	'            ' ; the rest on gift certificate
+		fcc	'          ' ; the rest on gift certificate
 		fcc	'           GPL3+'
 		fcc	' sean@conman.org'
 
