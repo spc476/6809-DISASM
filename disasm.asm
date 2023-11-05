@@ -756,7 +756,7 @@ findexfull	ldu	ptoperand,y
 
 		lda	opbyte,y	; get operand byte
 		cmpu	ptoperand,y	; anything printed?
-		beq	findexdone	; nope, we're done
+		beq	findexdone	; yup, we're done
 		bita	#$10		; indirect?
 		beq	findexdone	; nope
 
@@ -865,8 +865,10 @@ fipcdone	addd	theaddr,y	; relative to PC
 		ldb	#regPC
 		lbra	strcpy
 
-fiaddr		lbsr	getiword
-		bsr	fiopr16
+fiaddr		lbsr	getiword	; get address
+		bsr	fiopr16		; print operand bytes
+		tst	indexidx,y	; only 00 (or X) supported
+		bne	fidxill		; anything else is illegal
 		lbra	phex4d		; brackets added later
 
 fi7off		lbsr	getibyte	; get byte
@@ -1139,7 +1141,7 @@ strcpydone	anda	#$7F		; mask of ending bit
 
 ;--------------------------------------------------------
 
-		fcc	'          ' ; the rest on gift certificate
+		fcc	'      ' ; the rest on gift certificate
 		fcc	'          LGPL3+'
 		fcc	' sean@conman.org'
 
