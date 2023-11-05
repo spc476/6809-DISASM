@@ -771,6 +771,19 @@ slidetext	lda	,-u		; slide text over one character
 		sta	,u
 findexdone	rts
 
+firp		lda	opbyte,y	; get operand byte
+		bita	#$10		; indirect bit illegal
+		bne	fidxill		; so handle
+fripnt		lda	#',		; display comma
+		sta	,u+
+		lda	indexidx,y	; get index reg
+		leax	indexreg,pc	; table of index registers
+		ldb	a,x		; get string
+		lbsr	strcpy		; print it
+		lda	#'+		; add +
+		sta	,u+
+		rts
+
 	; -----------
 
 fijmptab	bra	firp		; ,R+
@@ -791,19 +804,6 @@ fijmptab	bra	firp		; ,R+
 		bra	fiaddr		; [address]
 
 	;----------------
-
-firp		lda	opbyte,y	; get operand byte
-		bita	#$10		; indirect bit illegal
-		bne	fidxill		; so handle
-fripnt		lda	#',		; display comma
-		sta	,u+
-		lda	indexidx,y	; get index reg
-		leax	indexreg,pc	; table of index registers
-		ldb	a,x		; get string
-		lbsr	strcpy		; print it
-		lda	#'+		; add +
-		sta	,u+
-		rts
 
 firpp		bsr	fripnt		; handle the ,R+
 		sta	,u+		; and add the final +
@@ -852,10 +852,15 @@ fiarfinish	lbsr	strcpy
 		ldb	a,x
 		lbra	strcpy
 
-fi7pc		bsr	fi7off		; handle +-7b,PC
-		fcb	$8C		; cmpx # (skip next instruction)
-
-fi15pc		bsr	fi15off		; handle +-15b,PC
+fi7pc		lbsr	getibyte	; handle +-7b,PC
+		bsr	fiopr8
+		sex
+		bra	fipcdone
+fi15pc		lbsr	getiword	; handle +-15b,PC
+		bsr	fiopr16
+fipcdone	addd	theaddr,y	; relative to PC
+		lbsr	phex4d		; print it
+		bsr	fioffdone
 		ldb	#regPC
 		lbra	strcpy
 
@@ -874,17 +879,15 @@ fioffdone	lda	#',		; add comma
 		sta	,u+
 		rts
 
-fiopr8		pshs	u		; save print pos
+fiopr8		pshs	u,d		; save print pos and D
 		ldu	poperand,y	; add additional operand byte
 		leau	2,u		; (skip past what we have)
-		pshs	a		; save A
 		lbsr	phex2		; print byte
-		puls	a,u,pc
+		puls	d,u,pc
 
-fiopr16		pshs	u		; save print pos
+fiopr16		pshs	u,d		; save print pos
 		ldu	poperand,y	; add addtional operand bytes
 		leau	2,u		; (skip past what we have)
-		pshs	d		; save D
 		lbsr	phex4d		; print word
 		puls	d,u,pc
 
@@ -1134,8 +1137,8 @@ strcpydone	anda	#$7F		; mask of ending bit
 		puls	a,x,pc		; return
 
 ;--------------------------------------------------------
-		fcc	'       '	; the rest on gift certificate
-		fcc	'                '
+
+		fcc	'            ' ; the rest on gift certificate
 		fcc	'           GPL3+'
 		fcc	' sean@conman.org'
 
