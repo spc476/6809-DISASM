@@ -1140,7 +1140,7 @@ strcpydone	anda	#$7F		; mask of ending bit
 ;--------------------------------------------------------
 
 		fcc	'          ' ; the rest on gift certificate
-		fcc	'           GPL3+'
+		fcc	'          LGPL3+'
 		fcc	' sean@conman.org'
 
 zzlast		equ	*
