@@ -22,10 +22,11 @@
 # You'll need to replace the following with a 6809 assembler that at least
 # supports FCS and the ability to handle line 760 of disasm.asm.
 
-AS09 = $(HOME)/source/6809/asm/la09.lua
+AS09      = $(HOME)/source/asm/a09/a09
+AS09FLAGS = -nW0009 -l $(*F).list
 
 % : %.asm
-	$(AS09) $(AS09FLAGS) -o $@ -l $(*F).list $<
+	$(AS09) $(AS09FLAGS) -o $@ $<
 
 .PHONY: all clean
 
