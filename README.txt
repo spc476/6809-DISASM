@@ -3,7 +3,7 @@
 
 This implements a thread-safe, position independent, ROMable 2K routine to
 disassemble a single MC6809 instruction.  The RAM requirements are minimal,
-requiring only 44 bytes of stack, and 55 bytes of non-stack RAM in order to
+requiring only 47 bytes of stack, and 55 bytes of non-stack RAM in order to
 operate.
 
 Upon entry, the X register needs to point to 55 bytes of RAM, which will be

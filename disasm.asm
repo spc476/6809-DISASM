@@ -21,8 +21,8 @@
 ;
 ; This software is an MC6809 disassembler written in MC6809 assembly.  The
 ; code is position independent, so it can be placed anywhere in memory.  It
-; is also read only, so it can be placed in ROM.  It uses 44 bytes of
-; stackspace, and requires 55 bytes for output.
+; is also read only, so it can be placed in ROM.  It uses 47 bytes of
+; stackspace (including return address), and requires 55 bytes for output.
 ;
 ;	DISASM		Disassemble one instuction
 ;		Entry	X - at least 55 bytes of RAM
