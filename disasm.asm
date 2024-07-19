@@ -919,7 +919,7 @@ frelative	lda	[theaddr,y]
 
 flrelative	ldu	ptopcode,y	; shift text opcode
 		ldd	1,u		; over one character
-		std	2,u		l so we can insert
+		std	2,u		; so we can insert
 		ldb	,u		; the 'L' character
 		lda	#'L
 		std	,u
