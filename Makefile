@@ -20,12 +20,14 @@
 # *************************************************************************
 
 # You'll need to replace the following with a 6809 assembler that at least
-# supports FCS and the ability to handle line 760 of disasm.asm.
+# supports FCS and the ability to handle line 754 of disasm.asm.
 
-AS09      = $(HOME)/source/asm/a09/a09
+AS09      = a09
 AS09FLAGS = -nW0009 -l $(*F).list
 
-% : %.asm
+.SUFFIXES: .asm
+
+.asm:
 	$(AS09) $(AS09FLAGS) -o $@ $<
 
 .PHONY: all clean
@@ -33,6 +35,4 @@ AS09FLAGS = -nW0009 -l $(*F).list
 all: disasm testdisasm
 
 clean:
-	$(RM) $(shell find . -name '*~')
-	$(RM) $(shell find . -name '*.list')
-	$(RM) disasm testdisasm
+	$(RM) *~ *.list disasm testdisasm
