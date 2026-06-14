@@ -20,7 +20,7 @@
 ;*************************************************************************
 ;
 ; This is just to test the disassembler, it's not meant to run.
-
+		.opt	* disable W0022
 	; $00 - $0F
 		neg	$00
 		fcb	$01
@@ -203,10 +203,10 @@
 		rol	,--x
 		dec	a,x
 		fcb	$6B
-		inc	<*+$6C+3,pc
-		tst	>*+$6D8D+4,pc
-		jmp	[<*+$6E+3,pc]
-		clr	[>*+$6F9D+4,pc]
+		inc	<*+$6C+3,pcr
+		tst	>*+$6D8D+4,pcr
+		jmp	[<*+$6E+3,pcr]
+		clr	[>*+$6F9D+4,pcr]
 
 	; $70-7F
 		neg	$7070
@@ -275,8 +275,8 @@
 		adca	$A9A9,y
 		ora	,y
 		adda	d,y
-		cmpx	*-81,pc
-		jsr	*-80,pc
+		cmpx	*-81,pcr
+		jsr	*-80,pcr
 		ldx	,y
 		stx	[$AFAF]
 
@@ -347,8 +347,8 @@
 		adcb	$E9E9,s
 		orb	,s
 		addb	d,s
-		ldd	*-17,pc
-		std	*-16,pc
+		ldd	*-17,pcr
+		std	*-16,pcr
 		ldu	,s
 		stu	[$EFEF]
 

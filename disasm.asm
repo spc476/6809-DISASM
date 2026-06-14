@@ -578,11 +578,11 @@ disasm10	sta	,x+		; clear buffer space
 
 		lda	#opsize		; size of structure
 		ldb	[theaddr,y]	; get opcode
-		leax	ops,pc		; get ops table
+		leax	ops,pcr		; get ops table
 		mul			; calculate offset
 		leax	d,x		; point to entry
 		lbsr	caddroptop	; print addr, op, text op
-		leau	jmptab,pc	; get jump table
+		leau	jmptab,pcr	; get jump table
 		lda	,x		; get entry
 		jsr	a,u		; call entry
 
@@ -597,13 +597,13 @@ disasm10	sta	,x+		; clear buffer space
 ;--------------------------------------------------------
 
 fpage1		lda	#$10		; we're page 1
-		leax	opsp1,pc	; table of page1 opcodes
+		leax	opsp1,pcr	; table of page1 opcodes
 
 fpagerest	sta	thepage,y	; save for later
 		lda	[theaddr,y]	; get 2nd opcode byte
 		bsr	findop		; find entry
 		lbsr	coptop		; fill out text fields
-		leau	jmptab,pc	; pointer to instruction type 
+		leau	jmptab,pcr	; pointer to instruction type
 		lda	,x		; get instruction type
 		jsr	a,u		; handle it
 
@@ -621,7 +621,7 @@ fpagerest	sta	thepage,y	; save for later
 ;--------------------------------------------------------
 
 fpage2		lda	#$11		; we're page 2
-		leax	opsp2,pc	; table of page2 opcodes
+		leax	opsp2,pcr	; table of page2 opcodes
 		bra	fpagerest	; handle as per page1
 
 ;--------------------------------------------------------
@@ -741,7 +741,7 @@ findex10	ora	#$E0		; make negative
 		lbsr	sphex2
 		lda	#',		; comma
 		sta	,u+
-		leax	indexreg,pc	; and now register
+		leax	indexreg,pcr	; and now register
 		lda	indexidx,y	; get index
 		ldb	a,x		; get string representing index reg
 		lbra	strcpy		; print and return
@@ -751,7 +751,7 @@ findex10	ora	#$E0		; make negative
 findexfull	ldu	ptoperand,y
 		anda	#$0F		; isolate last four bits
 		lsla			; convert into index
-		leax	<fijmptab,pc	; and jump to appropriate routine
+		leax	<fijmptab,pcr	; and jump to appropriate routine
 		jsr	a,x
 
 		lda	opbyte,y	; get operand byte
@@ -777,7 +777,7 @@ firp		lda	opbyte,y	; get operand byte
 fripnt		lda	#',		; display comma
 		sta	,u+
 		lda	indexidx,y	; get index reg
-		leax	indexreg,pc	; table of index registers
+		leax	indexreg,pcr	; table of index registers
 		ldb	a,x		; get string
 		lbsr	strcpy		; print it
 		lda	#'+		; add +
@@ -815,7 +815,7 @@ fimp		lda	opbyte,y	; get operand byte
 		ldb	#tcm		; get ,-
 		lbsr	strcpy		; print it
 fimpfinish	lda	indexidx,y	; get index reg
-		leax	indexreg,pc	; table of index registers
+		leax	indexreg,pcr	; table of index registers
 		ldb	a,x		; get string
 		lbra	strcpy		; print it
 
@@ -847,7 +847,7 @@ fi15r		bsr	fi15off		; print 15bit offset
 
 fidr		ldb	#tdr		; get D,R
 fiarfinish	lbsr	strcpy
-		leax	indexreg,pc
+		leax	indexreg,pcr
 		lda	indexidx,y
 		ldb	a,x
 		lbra	strcpy
@@ -943,7 +943,7 @@ frelptraddr	addd	theaddr,y
 fexg		ldu	poperand,y
 		lda	[theaddr,y]
 		lbsr	phex2
-		leax	exgtfr,pc
+		leax	exgtfr,pcr
 		ldu	ptoperand,y
 		lda	[theaddr,y]
 		lsra
@@ -978,7 +978,7 @@ fpushpulls	ldb	#regU
 		ldu	poperand,y
 		lda	[theaddr,y]
 		bsr	phex2
-		leax	pshpultab,pc
+		leax	pshpultab,pcr
 		ldu	ptoperand,y
 		bsr	getibyte
 		ldb	#8
@@ -1129,7 +1129,7 @@ phex		anda	#$0F		; isolate lower nibble
 ;--------------------------------------------------------
 
 strcpy		pshs	a,x
-		leax	init,pc
+		leax	init,pcr
 		abx			; add in offset
 strcpy10	lda	,x+
 		bmi	strcpydone
